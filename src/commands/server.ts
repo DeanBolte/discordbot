@@ -9,6 +9,14 @@ const {
     griddyIcon,
 } = require("../../config.json");
 
+const getIp = async () => {
+    let serverIp: string = "no ip";
+    await fetch("https://ipinfo.io/ip").then((value) =>
+        value.text().then((ip) => (serverIp = ip))
+    );
+    return serverIp;
+};
+
 export const data = new SlashCommandBuilder()
     .setName("server")
     .setDescription("Communicates Minecraft server information to the user.");
@@ -16,7 +24,8 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction: CommandInteraction) {
     // Grab the server address from the command details.
     // const address = interaction.options.getString("address");
-    const address = "localhost";
+    const address: string = await getIp();
+    console.log(address);
     const iconRequest = minecraftIconUrl + address;
     const serverRequest = minecraftUrl + address;
 
